@@ -232,7 +232,44 @@ export const paymentVerificationAndOrderCreation = TryCatch(
     }
   }
 );
+export const cancelOrder = TryCatch(async (req, res, next) => {
+  const  id  = req.params.id;
+  console.log(id);
 
+  if (!id) return next(new ErrorHandler("ID is required", 400));
+  const order = await Order.findById(id);
+  console.log(order);
+  if (!order)
+      return next(new ErrorHandler("Order Not Found", 404));
+  const time = order.createdAt;
+  const timeDifference = Date.now() - time.getTime();
+  console.log(time);
+  //last 24 hours (24 * 60 * 60 * 1000 = 86400000 ms)
+  if (timeDifference < 86400000) {
+      console.log("cancelled");
+      order.status = "Cancelled";
+      await order.save();
+      invalidateCache({
+          product: false,
+          order: true,
+          admin: true,
+          userId: order.user,
+          orderId: String(order._id),
+      });
+      return res.status(200).json({
+          success: true,
+          message: "Order has been cancelled.",
+          order,
+      });
+  }
+  else {
+      console.log(" not cancelled");
+      return res.status(400).json({
+          success: false,
+          message: "Order cannot be cancelled after 24 hours.",
+      });
+  }
+});
 export const processOrder = TryCatch(async (req, res, next) => {
   const { id } = req.params;
 

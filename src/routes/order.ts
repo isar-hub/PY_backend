@@ -2,6 +2,7 @@ import express from "express";
 import { adminOnly } from "../middlewares/auth.js";
 import {
   allOrders,
+  cancelOrder,
   createRazorpayOrder,
   deleteOrder,
   getSingleOrder,
@@ -31,6 +32,7 @@ app.get("/my", myOrders);
 
 // route - /api/v1/order/all
 app.get("/all", adminOnly, allOrders);
+app.put("/cancel/:id",cancelOrder)
 
 app
   .route("/:id")
