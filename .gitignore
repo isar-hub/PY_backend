@@ -119,7 +119,6 @@ dist
 
 # Ignore uploads, dist folder, and node_modules folder
 uploads/
-dist/
 node_modules/
 
 # End of https://mrkandreev.name/snippets/gitignore-generator/#Node
