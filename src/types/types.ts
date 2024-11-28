@@ -38,6 +38,7 @@ export interface INewProductRequestBody {
   name: string;
   category: string;
   price: number;
+  sellingPrice : number;
   stock: number;
   description: string;
 }

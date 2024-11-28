@@ -55,7 +55,10 @@ const schema = new mongoose.Schema({
     orderItems: [
         {
             name: String,
-            photo: String,
+            photo: {
+                type: [String],
+                default: []
+            },
             price: Number,
             quantity: Number,
             productId: {

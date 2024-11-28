@@ -21,7 +21,7 @@ import ErrorHandler from "../utils/utility-class.js";
 export const getlatestProducts = TryCatch(async (req, res, next) => {
   let products;
 
-  products = await redis.get("latest-products");
+  // products = await redis.get("latest-products");
 
   if (products) products = JSON.parse(products);
   else {
@@ -97,7 +97,7 @@ export const getSingleProduct = TryCatch(async (req, res, next) => {
 
 export const newProduct = TryCatch(
   async (req: Request<{}, {}, INewProductRequestBody>, res, next) => {
-    const { name, price, stock, category, description } = req.body;
+    const { name, price, stock, category, description, sellingPrice } = req.body;
     const photos = req.files as Express.Multer.File[] | undefined;
 
     if (!photos) return next(new ErrorHandler("Please add Photo", 400));
@@ -108,9 +108,20 @@ export const newProduct = TryCatch(
     if (photos.length > 5)
       return next(new ErrorHandler("You can only upload 5 Photos", 400));
 
-    if (!name || !price || !stock || !category || !description)
-      return next(new ErrorHandler("Please enter All Fields", 400));
+    
+    const missingFields = [];
 
+    if (!name) missingFields.push('name');
+    if (!price) missingFields.push('price');
+    if (!stock) missingFields.push('stock');
+    if (!category) missingFields.push('category');
+    if (!description) missingFields.push('description');
+    if (!sellingPrice) missingFields.push('sellingPrice');
+
+    
+    if (missingFields.length > 0) {
+      return next(new ErrorHandler(`Please enter ${missingFields.join(', ')}`, 400));
+  }
     // Upload Here
 
     const photosURL = await uploadToCloudinary(photos);
@@ -118,6 +129,7 @@ export const newProduct = TryCatch(
     await Product.create({
       name,
       price,
+      sellingPrice,
       description,
       stock,
       category: category.toLowerCase(),
