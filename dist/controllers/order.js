@@ -134,13 +134,24 @@ export const paymentVerificationAndOrderCreation = TryCatch(async (req, res, nex
     const generated_signature = hmac.digest("hex");
     if (generated_signature === razorpay_signature) {
         const { shippingInfo, orderItems, user, subtotal, tax, shippingCharges, discount, total, } = orderData;
-        if (!shippingInfo ||
-            !orderItems ||
-            !user ||
-            !subtotal ||
-            !tax ||
-            !total) {
-            return next(new ErrorHandler("Please Enter All Fields", 400));
+        if (shippingInfo == null) {
+            return next(new ErrorHandler("Shipping information is required", 400));
+        }
+        if (orderItems == null) {
+            return next(new ErrorHandler("Order items are required", 400));
+        }
+        if (user == null) {
+            return next(new ErrorHandler("User information is required", 400));
+        }
+        if (subtotal == null) {
+            return next(new ErrorHandler("Subtotal is required", 400));
+        }
+        // Explicitly check for undefined or null for tax
+        if (tax == null) {
+            return next(new ErrorHandler("Tax information is required", 400));
+        }
+        if (total == null) {
+            return next(new ErrorHandler("Total amount is required", 400));
         }
         const order = await Order.create({
             shippingInfo,
