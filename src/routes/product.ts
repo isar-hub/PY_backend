@@ -37,7 +37,8 @@ app.get("/admin-products", adminOnly, getAdminProducts);
 app
   .route("/:id")
   .get(getSingleProduct)
-  .put(adminOnly, multiUpload, updateProduct,updateProductPhotos)
+  .put(adminOnly, multiUpload, updateProduct)
+  .patch(adminOnly, updateProductPhotos)
   .delete(adminOnly, deleteProduct);
 
 app.get("/reviews/:id", allReviewsOfProduct);

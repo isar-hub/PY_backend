@@ -16,14 +16,19 @@ const schema = new mongoose.Schema(
           type: String,
           required: [true, "Please enter URL"],
         },
+        idx: {
+          type: Number,
+          default: -1,
+        }
       },
     ],
+
     price: {
       type: Number,
       required: [true, "Please enter Price"],
     },
     sellingPrice: {
-      type : Number,
+      type: Number,
       required: [true, "Please enter Selling Price"],
     },
     stock: {
