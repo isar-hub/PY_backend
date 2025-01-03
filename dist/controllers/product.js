@@ -77,8 +77,8 @@ export const newProduct = TryCatch(async (req, res, next) => {
         return next(new ErrorHandler("Please add Photo", 400));
     if (photos.length < 1)
         return next(new ErrorHandler("Please add atleast one Photo", 400));
-    if (photos.length > 5)
-        return next(new ErrorHandler("You can only upload 5 Photos", 400));
+    if (photos.length > 100)
+        return next(new ErrorHandler("You can only upload 100  Photos", 400));
     const missingFields = [];
     if (!name)
         missingFields.push('name');

@@ -13,4 +13,4 @@ import { v4 as uuid } from "uuid";
 // });
 
 // export const singleUpload = multer({ storage }).single("photo");
-export const multiUpload = multer().array("photos", 5);
+export const multiUpload = multer().array("photos", 100);

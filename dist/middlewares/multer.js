@@ -10,4 +10,4 @@ import multer from "multer";
 //   },
 // });
 // export const singleUpload = multer({ storage }).single("photo");
-export const multiUpload = multer().array("photos", 5);
+export const multiUpload = multer().array("photos", 100);
