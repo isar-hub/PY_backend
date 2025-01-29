@@ -14,6 +14,10 @@ const schema = new mongoose.Schema({
                 type: String,
                 required: [true, "Please enter URL"],
             },
+            idx: {
+                type: Number,
+                default: -1,
+            }
         },
     ],
     price: {

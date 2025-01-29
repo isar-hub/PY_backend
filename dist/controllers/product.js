@@ -115,10 +115,13 @@ export const newProduct = TryCatch(async (req, res, next) => {
 export const updateProductPhotos = TryCatch(async (req, res, next) => {
     const { id } = req.params;
     const { photosUrl } = req.body;
+    if (!id || !photosUrl) {
+        return res.status(400).json({ message: "Missing required fields." });
+    }
     const product = await Product.findById(id);
     if (!product)
         return next(new ErrorHandler("Product Not Found", 404));
-    product.set("photos", photosUrl);
+    product.photos = photosUrl;
     await product.save();
     return res.status(200).json({
         success: true,

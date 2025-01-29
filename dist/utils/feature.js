@@ -135,8 +135,9 @@ export const uploadToCloudinary = async (files) => {
         });
     });
     const result = await Promise.all(promises);
-    return result.map((i) => ({
-        public_id: i.public_id,
-        url: i.secure_url,
+    return result.map((item, index) => ({
+        public_id: item.public_id,
+        url: item.secure_url,
+        idx: index,
     }));
 };
