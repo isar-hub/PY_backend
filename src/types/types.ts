@@ -41,6 +41,7 @@ export interface INewProductRequestBody {
   sellingPrice : number;
   stock: number;
   description: string;
+  gender:string;
 }
 export interface INewCouponRequestBody {
   coupon: string;

@@ -97,7 +97,7 @@ export const getSingleProduct = TryCatch(async (req, res, next) => {
 
 export const newProduct = TryCatch(
   async (req: Request<{}, {}, INewProductRequestBody>, res, next) => {
-    const { name, price, stock, category, description, sellingPrice } = req.body;
+    const { name, price, stock, category, description, sellingPrice, gender } = req.body;
     const photos = req.files as Express.Multer.File[] | undefined;
 
     if (!photos) return next(new ErrorHandler("Please add Photo", 400));
@@ -117,6 +117,7 @@ export const newProduct = TryCatch(
     if (!category) missingFields.push('category');
     if (!description) missingFields.push('description');
     if (!sellingPrice) missingFields.push('sellingPrice');
+    if(!gender) missingFields.push('gender')
 
     
     if (missingFields.length > 0) {
@@ -133,6 +134,7 @@ export const newProduct = TryCatch(
       description,
       stock,
       category: category.toLowerCase(),
+      gender,
       photos: photosURL,
     });
 
