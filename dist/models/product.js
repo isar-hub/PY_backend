@@ -45,6 +45,12 @@ const schema = new mongoose.Schema({
         type: Number,
         default: 0,
     },
+    gender: {
+        type: String,
+        required: [true, "Please enter gender"],
+        trim: true,
+        enum: ["Men", "Women", "Couples"], // Restricting gender values
+    },
     numOfReviews: {
         type: Number,
         default: 0,

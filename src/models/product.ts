@@ -54,7 +54,7 @@ const schema = new mongoose.Schema(
       type: String,
       required: [true, "Please enter gender"],
       trim: true,
-      enum: ["men", "women", "couples"], // Restricting gender values
+      enum: ["Men", "Women", "Couples"], // Restricting gender values
     },
 
     numOfReviews: {

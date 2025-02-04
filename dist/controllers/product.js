@@ -71,7 +71,7 @@ export const getSingleProduct = TryCatch(async (req, res, next) => {
     });
 });
 export const newProduct = TryCatch(async (req, res, next) => {
-    const { name, price, stock, category, description, sellingPrice } = req.body;
+    const { name, price, stock, category, description, sellingPrice, gender } = req.body;
     const photos = req.files;
     if (!photos)
         return next(new ErrorHandler("Please add Photo", 400));
@@ -79,6 +79,7 @@ export const newProduct = TryCatch(async (req, res, next) => {
         return next(new ErrorHandler("Please add atleast one Photo", 400));
     if (photos.length > 100)
         return next(new ErrorHandler("You can only upload 100  Photos", 400));
+    console.log(req.body);
     const missingFields = [];
     if (!name)
         missingFields.push('name');
@@ -92,6 +93,8 @@ export const newProduct = TryCatch(async (req, res, next) => {
         missingFields.push('description');
     if (!sellingPrice)
         missingFields.push('sellingPrice');
+    if (!gender)
+        missingFields.push('gender');
     if (missingFields.length > 0) {
         return next(new ErrorHandler(`Please enter ${missingFields.join(', ')}`, 400));
     }
@@ -104,6 +107,7 @@ export const newProduct = TryCatch(async (req, res, next) => {
         description,
         stock,
         category: category.toLowerCase(),
+        gender,
         photos: photosURL,
     });
     await invalidateCache({ product: true, admin: true });
@@ -185,10 +189,9 @@ export const deleteProduct = TryCatch(async (req, res, next) => {
     });
 });
 export const getAllProducts = TryCatch(async (req, res, next) => {
-    const { search, sort, category, price } = req.query;
+    const { search, sort, category, price, gender } = req.query;
     const page = Number(req.query.page) || 1;
-    const key = `products-${search}-${sort}-${category}-${price}-${page}`;
-    console.log(`page is ${page}`);
+    const key = `products-${search}-${sort}-${category}-${price}-${page}-${gender}`;
     let products;
     let totalPage;
     const cachedData = await redis.get(key);
@@ -215,6 +218,8 @@ export const getAllProducts = TryCatch(async (req, res, next) => {
             };
         if (category)
             baseQuery.category = category;
+        if (gender)
+            baseQuery.gender = gender;
         const productsPromise = Product.find(baseQuery)
             .sort(sort && { price: sort === "asc" ? 1 : -1 })
             .limit(limit)

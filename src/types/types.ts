@@ -24,6 +24,7 @@ export interface IBaseQuery {
   };
   price?: { $lte: number };
   category?: string;
+  gender?:string;
 }
 
 export type SearchRequestQuery = {
@@ -32,6 +33,7 @@ export type SearchRequestQuery = {
   category?: string;
   sort?: string;
   page?: string;
+  gender?:string;
 };
 
 export interface INewProductRequestBody {
